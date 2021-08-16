@@ -3,6 +3,8 @@ package touched.agi.java.app.methods;
 import org.asteriskjava.fastagi.AgiChannel;
 import org.asteriskjava.fastagi.AgiException;
 import org.asteriskjava.fastagi.AgiRequest;
+import org.asteriskjava.fastagi.command.AgiCommand;
+import org.asteriskjava.fastagi.reply.AgiReply;
 
 import javax.annotation.Nullable;
 
@@ -118,6 +120,19 @@ public abstract class Methods {
     }
 
     /**
+     invoke the dial command
+
+     Params:
+     * @param target
+     * @param timeout
+     * @param options
+     * @throws AgiException
+     */
+    public void Dial(String target, int timeout, String options) throws AgiException {
+        channel.dial(target, timeout, options);
+    }
+
+    /**
      * Executes the given command.
      Params:
      * @param command – the name of the command to execute, for example "Dial".
@@ -168,6 +183,247 @@ public abstract class Methods {
      */
     public char GetOption(String file, @Nullable String escapeDigits, @Nullable long timeout) throws AgiException {
         return channel.getOption(file, escapeDigits, timeout);
+    }
+
+    /**
+     Returns the value of the current channel or global variable. Supports functions and builtin variables. To retrieve the caller id you can use getVariable("CALLERID(name)"); Does not support expression parsing, use getFullVariable(String) in those cases.
+
+     Params:
+     * @param name – the name of the variable (or function call) to retrieve.
+     * @return - the value of the given variable or null if not set.
+     * @throws AgiException
+     */
+
+    public String GetVariable(String name) throws AgiException {
+        return channel.getVariable(name);
+    }
+
+    /**
+     Calls a subroutine in the dialplan
+     This method is available since Asterisk 1.6.
+
+     Params:
+     * @param context – the context of the called subroutine.
+     * @param extension – the extension in the called context.
+     * @param priority – the priority of the called extension.
+     * @param arguments – optional arguments to be passed to the subroutine. They should be separated by comma. They will accessible in the form of ${ARG1}, ${ARG2}, etc in the subroutine body.
+     */
+    public void GoSub(String context, String extension, String priority, String... arguments) throws AgiException {
+        channel.gosub(context, extension, priority, arguments);
+    }
+
+    /**
+     Hangs the channel up.
+
+     * @throws AgiException
+     */
+
+    public void HangUp() throws AgiException {
+        channel.hangup();
+    }
+
+    /**
+     Record to a file until a given dtmf digit in the sequence is received.
+
+     Params:
+     * @param file – the name of the file to stream, must not include extension.
+     * @param format – the format of the file to be recorded, for example "wav".
+     * @param escapeDigits – contains the digits that allow the user to end recording.
+     * @param timeout – the maximum record time in milliseconds, or -1 for no timeout.
+     * @param offset – the offset samples to skip.
+     * @param beep – true if a beep should be played before recording.
+     * @param maxSilence – The amount of silence (in seconds) to allow before returning despite the lack of dtmf digits or reaching timeout.
+     * @return - the DTMF digit pressed or 0x0 if none was pressed.
+     */
+
+    public char Record(String file, String format, String escapeDigits, int timeout, int offset, boolean beep, int maxSilence) throws AgiException {
+        return channel.recordFile(file, format, escapeDigits, timeout, offset, beep, maxSilence);
+    }
+
+    /**
+     Sends a command to asterisk and returns the corresponding reply. The reply is also available through getLastReply().
+
+     * @param command – the command to send.
+     * @return - the reply of the asterisk server containing the return value.
+     * @throws AgiException - org.asteriskjava.fastagi.AgiException – if the command can't be sent to Asterisk (for example because the channel has been hung up)
+     */
+    public AgiReply SendCommand(AgiCommand command) throws AgiException {
+        return channel.sendCommand(command);
+    }
+
+    /**
+     Says the given character string, returning early if any of the given DTMF number are received on the channel.
+
+     Params:
+     * @param text – the text to say.
+     * @param escapeDigits – a String containing the DTMF digits that allow the user to escape.
+     * @throws AgiException - the DTMF digit pressed or 0x0 if none was pressed.
+     */
+
+    public char SayAlpha(String text, String escapeDigits) throws AgiException {
+        return channel.sayAlpha(text, escapeDigits);
+    }
+
+    /**
+     Says the given time.
+     Available since Asterisk 1.2.
+
+     Params:
+     * @param time – the time to say in seconds elapsed since 00:00:00 on January 1, 1970, Coordinated Universal Time (UTC)
+     * @throws AgiException
+     */
+    public void SayDateTime(long time) throws AgiException {
+        channel.sayDateTime(time);
+    }
+
+    /**
+     Says the given digit string.
+
+     Params:
+     * @param digits – the digit string to say
+     * @throws AgiException
+     */
+    public void SayDigits(String digits) throws AgiException {
+        channel.sayDigits(digits);
+    }
+
+    /**
+     Says the given number.
+
+     Params:
+     * @param number – the number to say.
+     * @throws AgiException
+     */
+    public void SayNumber(String number) throws AgiException {
+        channel.sayNumber(number);
+    }
+
+    /**
+     Says the given character string with phonetics.
+
+     Params:
+     * @param text – the text to say.
+     * @throws AgiException
+     */
+    public void SayPhonetic(String text) throws AgiException {
+        channel.sayPhonetic(text);
+    }
+
+    /**
+     Says the given time.
+
+     Params:
+     * @param time – the time to say in seconds since 00:00:00 on January 1, 1970.
+     * @throws AgiException
+     */
+    public void SayTime(Long time) throws AgiException {
+        channel.sayTime(time);
+    }
+
+    /**
+     Cause the channel to automatically hangup at the given number of seconds in the future.
+
+     Params:
+     0 disables the autohangup feature.
+
+     * @param time – the number of seconds before this channel is automatically hung up.
+     * @throws AgiException
+     */
+    public void SetAutoHangup(int time) throws AgiException {
+        channel.setAutoHangup(time);
+    }
+
+    /**
+     Sets the caller id on the current channel.
+
+     Params:
+     * @param callerid – the raw caller id to set, for example "John Doe<1234>".
+     * @throws AgiException
+     */
+    public void SetCallerID(String callerid) throws AgiException {
+        channel.setCallerId(callerid);
+    }
+
+    /**
+     Sets the context for continuation upon exiting the application.
+
+     Params:
+     * @param context – the context for continuation upon exiting the application
+     * @throws AgiException
+     */
+    public void SetContext(String context) throws AgiException {
+        channel.setContext(context);
+    }
+
+    /**
+     Sets the extension for continuation upon exiting the application.
+
+     Params:
+     * @param extension – the extension for continuation upon exiting the application.
+     * @throws AgiException
+     */
+    public void SetExtension(String extension) throws AgiException {
+        channel.setExtension(extension);
+    }
+
+
+    /**
+     Sets the priority or label for continuation upon exiting the application.
+
+     Params:
+     * @param priority – the priority or label for continuation upon exiting the application
+     * @throws AgiException
+     */
+    public void SetPriority(String priority) throws AgiException {
+        channel.setPriority(priority);
+    }
+
+    /**
+     Sets the value of the current channel or global variable to a new value. Supports functions and builtin variables. To set the caller id you can use setVariable("CALLERID(name)", "John Doe");
+
+     Params:
+     * @param name – the name of the variable (or function call) to set.
+     * @param value – the new value to set.
+     * @throws AgiException
+     */
+    public void SetVariable(String name, String value) throws AgiException {
+        channel.setVariable(name, value);
+    }
+
+    /**
+
+     Plays the given file.
+
+     Params:
+     * @param file – name of the file to play
+     * @throws AgiException
+     */
+    public void StreamFile(String file) throws AgiException {
+        channel.streamFile(file);
+    }
+
+    /**
+     Sends a message to the Asterisk console via the verbose message system.
+
+     Params:
+     * @param message – the message to send.
+     * @param level – the verbosity level to use. Must be in [1..4].
+     * @throws AgiException
+     */
+    public void Verbose(String message, int level) throws AgiException {
+        channel.verbose(message, level);
+    }
+
+    /**
+     Waits up to 'timeout' milliseconds to receive a DTMF digit.
+
+     Params:
+     * @param timeout – timeout the milliseconds to wait for the channel to receive a DTMF digit, -1 will wait forever.
+     * @return - the DTMF digit pressed or 0x0 if none was pressed.
+     * @throws AgiException
+     */
+    public char WaitForDigits(int timeout) throws AgiException {
+        return channel.waitForDigit(timeout);
     }
 
 }
