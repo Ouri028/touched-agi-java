@@ -8,6 +8,7 @@ import org.asteriskjava.fastagi.reply.AgiReply;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("ALL")
 public abstract class Methods {
     protected AgiRequest request;
     protected AgiChannel channel;

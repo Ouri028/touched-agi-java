@@ -3,8 +3,6 @@ package touched.agi.java.app.server;
 import org.asteriskjava.fastagi.AgiServerThread;
 import org.asteriskjava.fastagi.DefaultAgiServer;
 
-import java.io.IOException;
-
 public class Server {
     /**
      * Variables
@@ -23,9 +21,8 @@ public class Server {
 
     /**
      * Startup the FastAgi server and initialize an Agi thread.
-     * @throws IOException
      */
-    public void Startup() throws IOException {
+    public void Startup() {
         try {
             this.agiServer = new DefaultAgiServer();
             this.agiServer.setPort(Port);
@@ -34,15 +31,15 @@ public class Server {
             this.agiThread.startup();
 
         } catch (Exception e) {
-            System.err.printf("System failed to start due to error: {}", e);
+            System.err.printf("System failed to start due to error: %s", e);
+            this.Shutdown();
         }
     }
 
     /**
      * Shutdown the active FastAgi Server and Agi Thread
-     * @throws IOException
      */
-    public void Shutdown() throws IOException {
+    public void Shutdown() {
         try {
             if (this.agiServer != null) {
                 if (this.agiThread != null) {
@@ -55,7 +52,7 @@ public class Server {
                 System.out.println("FasAGI Server Shutdown.");
             }
         } catch (Exception e) {
-            System.err.printf("FasAGI failed to shutdown due to error: {}", e);
+            System.err.printf("FasAGI failed to shutdown due to error: %s", e);
         }
     }
 }
