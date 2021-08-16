@@ -1,4 +1,4 @@
-package touched.agi.java.app.methods;
+package touched.agi.java.methods;
 
 import org.asteriskjava.fastagi.AgiChannel;
 import org.asteriskjava.fastagi.AgiException;

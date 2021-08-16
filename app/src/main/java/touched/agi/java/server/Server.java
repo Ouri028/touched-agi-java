@@ -1,4 +1,4 @@
-package touched.agi.java.app.server;
+package touched.agi.java.server;
 
 import org.asteriskjava.fastagi.AgiServerThread;
 import org.asteriskjava.fastagi.DefaultAgiServer;
@@ -13,7 +13,7 @@ public class Server {
 
     /**
      *
-     * @param port -> Define a port for the FastAgi to run on. [Default Port 4375]
+     * @param port -> Define a port for the FastAgi to run on. [Default Port 4573]
      */
     public Server(int port) {
         Port = port;
@@ -53,6 +53,7 @@ public class Server {
             }
         } catch (Exception e) {
             System.err.printf("FasAGI failed to shutdown due to error: %s", e);
+            this.agiServer.shutdown();
         }
     }
 }
