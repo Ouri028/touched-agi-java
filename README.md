@@ -86,7 +86,7 @@ java -jar sample_agi.jar
 
 ### Recommendations:
 
-If you would like to have the FastAgi script run in the background will a managed system, I would recommend using PM2 to manage the FastAgi Server.
+If you would like to have the FastAgi script run in the background with a managed system, I would recommend using PM2 to manage the FastAgi Server.
 
 ### Author:
 Sylvester Stephenson
