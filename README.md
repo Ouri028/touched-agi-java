@@ -40,24 +40,9 @@ import touched.agi.java.methods.Methods;
 public class Agi extends BaseAgiScript {
     
 @Override
-public void service(AgiRequest agiRequest, AgiChannel agiChannel) throws AgiException {
-Methods ctx = new Methods(agiRequest, agiChannel) {
-        
-        @Override
-        public String GetData(String file, long timeout) throws AgiException {
-        return super.GetData(file, timeout);
-        }
-
-        @Override
-        public void SayDigits(String digits) throws AgiException {
-            super.SayDigits(digits);
-        }
-    };
-        String data = ctx.GetData("beep", 14000);
-        ctx.SayDigits(data);
-    }
-
-
+public void service(AgiRequest req, AgiChannel ctx) throws AgiException {
+    String data = ctx.getData("beep", 14000);
+    ctx.sayDigits(data)
 }
 ```
 
